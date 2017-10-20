@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>SPSS log-linear model</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    </head>
+    <body>
+
+<link rel="stylesheet" href="style.css">
+        
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<link rel="stylesheet" href="//pulipulichen.github.io/blogger/posts/2016/12/semantic/semantic.min.css">
+<link rel="stylesheet" href="http://fontawesome.io/assets/font-awesome/css/font-awesome.css">
+<script src="//pulipulichen.github.io/blogger/posts/2016/12/semantic/semantic.min.js"></script>
+<script src="//pulipulichen.github.io/blogger/posts/2016/12/clipboard.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/vue/2.1.8/vue.min.js"></script>
+
+<!-- ------------------------------------ -->
+
+<form class="file-process-framework ui form" id="file_process_framework">
+
+  <div class="ui three column doubling grid">
+    <div class="column">
+    <div class="ui segment">
+    
+<h1 class="ui horizontal divider header">
+  Variables
+</h1>
+
+    <div class="ui top attached tabular menu" style="display: none;">
+      <div class="active item" data-tab="textarea">Textarea</div>
+      <!-- <div class="active item" data-tab="file">File</div> -->
+    </div>
+
+<!-- --------------------------------- -->
+
+<div class="ui bottom attached active tab segment" data-tab="textarea">
+  <div class="field">
+    <label for="input_mode_textarea">Variables: </label>
+    <textarea v-model="input_mode_textarea" v-on:change="set_input_mode_textarea_output" v-on:keyup="set_input_mode_textarea_output"
+		class="input-mode textarea" id="input_mode_textarea" onfocus="this.select()"></textarea>
+  </div>
+  <div class="field">
+    <label for="input_mode_model">Model: </label>
+    <input type="text" v-model="input_mode_model" v-on:change="set_input_mode_textarea_output" v-on:keyup="set_input_mode_textarea_output"
+		class="input-mode model" id="input_mode_model" onfocus="this.select()" />
+  </div>
+  
+  
+  <!--
+  <div class="field">
+      <button type="button" class="ui primary button process-textarea">Submit</button>
+  </div>
+  -->
+    
+</div>
+
+<!-- --------------------------------- -->
+
+<div class="ui bottom attached tab segment" data-tab="file" style="display:none;">
+  <div class="field">
+      <label for="files">Please select a TXT file in UTF8 encoding: </label>
+    </div>
+    <div class="field">
+      <input class="myfile" name="files[]" id="files" multiple="" type="file" />
+      <div class="ui pointing inverted blue large basic label">
+        <a href="http://blog.pulipuli.info/2016/12/utf-8notepad-how-to-convert-plain-text.html" target="notepad" style="display: block">How to Convert TXT file to UTF8 encoding?</a>
+      </div>
+    </div>
+
+  
+  <div class="inline field">
+    <input type="checkbox" name="autodownload" id="autodownload" />
+    <label for="autodownload">Download Processed File Automatically</label>
+  </div>
+
+
+</div> <!-- <div class="ui bottom attached tab segment" data-tab="file"> -->
+
+    <!-- -------------------------------------- -->
+    
+  <div class="field">
+    <div class="loading hide"><img src="//dl.dropboxusercontent.com/u/717137/2016/loading.gif" /></div>
+  </div> <!-- <div class="field"> -->
+  
+        </div> <!-- <div class="ui segment"> -->
+    </div> <!-- <div class="column"> -->
+  <!-- -------------------------------------- -->
+  
+    <div class="column">
+  <div class="ui segment display-result" style="">
+  <!-- <div class="display-result"> -->
+  
+	
+    <h2 class="ui horizontal divider header">
+      Data & Command
+    </h2>
+	
+	<!--
+	<div class="ui doubling grid">
+		<div class="six wide column">
+			<button type="button" class="fluid ui large right labeled icon green button download-file">
+				<i class="right download icon"></i>
+				DOWNLOAD
+			  </button>
+		</div>
+		<div class="ten wide column">
+			<a href="https://docs.google.com/spreadsheet/ccc?new" target="_blank">
+				<button type="button" class="fluid ui large right labeled icon button">
+					<i class="right table icon"></i>
+					NEW SPREEDSHEET
+				</button>
+			</a>
+		</div>
+	</div>
+	-->
+	
+	<!--
+    <div class="field">
+      <label for="filename">File Name: </label>
+      <input type="text" onfocus="this.select()" id="filename" class="filename" style="width: calc(100% - 15em)" />
+    </div>
+	-->
+    <div class="field">
+      <label for="combinations">
+        Combinations: 
+		<button type="button" class="ui mini compact teal right labeled icon button copy-field" 
+			data-copy-field="#combinations"
+			style="margin-left: 1em">
+		  COPY
+		  <i class="copy icon"></i>
+	    </button>
+      </label>
+        
+      <textarea v-model="combinations" id="combinations" class="combinations" onfocus="this.select();"></textarea>
+    </div> <!-- <div class="field"> -->
+	
+	
+    <div class="field">
+      <label for="preview">
+        Command: 
+		<button type="button" class="ui mini compact teal right labeled icon button copy-field" 
+			data-copy-field="#preview"
+			style="margin-left: 1em">
+		  COPY
+		  <i class="copy icon"></i>
+	    </button>
+      </label>
+        
+      <textarea v-model="preview" id="preview" class="preview" onfocus="this.select();"></textarea>
+    </div> <!-- <div class="field"> -->
+	
+  </div> <!-- <div class="ui segment display-result" style=""> -->
+    </div> <!-- <div class="column"> -->
+	<div class="column">
+    <div class="ui segment display-result">
+<h1 class="ui horizontal divider header">
+  Parameters Calculator
+</h1>	
+	
+  <div class="ui doubling grid">
+	<div class="eight wide column">
+	  <div class="field">
+		<label for="odds_input">Odds Calculator: </label>
+		<input type="text" v-model="odds_input" v-on:change="calc_odds" v-on:keyup="calc_odds"
+			class="input-mode odds" id="odds_input" onfocus="this.select()" />
+	  </div>
+	</div>
+	<div class="eight wide column">
+	  <div class="field">
+		<label for="odds_output">
+			Result: 
+			<button type="button" class="ui mini compact teal right labeled icon button copy-field" 
+				data-copy-field="#odds_output"
+				style="margin-left: 1em">
+			  COPY
+			  <i class="copy icon"></i>
+			</button>
+		</label>
+		<input type="text" v-model="odds_output"
+			class="input-mode odds" id="odds_output" onfocus="this.select()" />
+	  </div>
+	</div>
+  </div>
+  
+  <!-- ---------------------- -->
+  
+  <div class="field">
+		<label for="para_input">Parameters Calculator: </label>
+		<textarea v-model="para_input" v-on:change="calc_para" v-on:keyup="calc_para"
+			class="input-mode para" id="para_input" onfocus="this.select()"></textarea>
+	</div>
+	<div class="field">
+	<button type="button" class="ui mini compact teal right labeled icon button copy-table" 
+				data-copy-table="#para_output"
+				style="margin-left: 1em">
+			  COPY TABLE
+			  <i class="copy icon"></i>
+			</button>
+		<table id="para_output" border="1" cellpadding="5" >
+			<tbody>
+			</tbody>
+		</table>
+  </div>
+	</div> <!-- <div class="ui segment display-result" style=""> -->
+	</div> <!-- <div class="column"> -->
+	
+  </div> <!-- <div class="ui two column doubling grid"> -->
+</form>
+
+<script src="script.js"></script>
+
+    </body>
+</html>
